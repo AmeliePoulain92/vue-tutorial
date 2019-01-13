@@ -2,7 +2,6 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <h1>title: {{data.title}}</h1>
-    <p>content: {{data.content}}</p>
 
     <MoviesList msg="Edit Modal" mode="edit" :data="data" v-if="data.id" />
     <MoviesList msg="Create modal" mode="create" v-else :data="data" :func="() => this.alertMethod()" @update:content="onChangeContent">
