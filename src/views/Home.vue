@@ -4,21 +4,21 @@
     <h1>title: {{data.title}}</h1>
     <p>content: {{data.content}}</p>
 
-    <HelloWorld msg="Edit Modal" mode="edit" :data="data" v-if="data.id" />
-    <HelloWorld msg="Create modal" mode="create" v-else :data="data" :func="() => this.alertMethod()" @update:content="onChangeContent">
+    <MoviesList msg="Edit Modal" mode="edit" :data="data" v-if="data.id" />
+    <MoviesList msg="Create modal" mode="create" v-else :data="data" :func="() => this.alertMethod()" @update:content="onChangeContent">
     	not default
-    </HelloWorld>
+    </MoviesList>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import MoviesList from '@/components/MoviesList.vue'
 
 export default {
   name: 'home',
   components: {
-    HelloWorld
+    MoviesList
   },
 
   data () {

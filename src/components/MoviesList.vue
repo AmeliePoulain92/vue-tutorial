@@ -1,27 +1,14 @@
 <template>
-  <div class="hello">
-    <h1>
-      <template v-if="mode === 'edit'">
-        Edit Your data
-      </template>
-      <template v-else>
-        Create data from scratch
-      </template>
-    </h1>
-
-    <input type="text" :value="data.title" />
-    <textarea cols="30" rows="10" :value="data.content" @change="changeContent"></textarea>
-
-    <button @click="updateData" v-if="mode === 'edit'">Edit</button>
-    <button @click="createData" v-else>Create</button>
-
-    <slot>default</slot>
+  <div>
+    <h1>Movies list</h1>
   </div>
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
-  name: 'HelloWorld',
+  name: 'MoviesList',
   props: {
     msg: String,
     mode: String,
@@ -39,6 +26,10 @@ export default {
         content: ''
       }
     }
+  },
+
+  mounted () {
+    axios.get('https://api.myjson.com/bins/e2ilc')
   },
 
   methods: {
