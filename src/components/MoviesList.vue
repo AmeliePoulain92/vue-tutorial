@@ -43,7 +43,7 @@ export default {
   mounted () {
     console.log('hook mounted')
 
-    axios.get('https://api.myjson.com/bins/e2ilc')
+    axios.get('https://api.myjson.com/bins/t9mzc')
     .then(moviesResponse => this.moviesList = moviesResponse.data)
   },
 
