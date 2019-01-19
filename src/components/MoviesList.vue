@@ -4,8 +4,8 @@
 
     <ul class="movies" v-if="moviesList && moviesList.length">
       <movie
-        v-for="(movie, index) in moviesList"
-        :key="index"
+        v-for="(movie) in moviesList"
+        :key="movie.id"
         @edit="onMovieEdit"
         :data="movie" />
     </ul>
