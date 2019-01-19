@@ -6,7 +6,7 @@
       <movie
         v-for="(movie, index) in moviesList"
         :key="index"
-        @edit-title="onUpdateTitle"
+        @edit="onMovieEdit"
         :data="movie" />
     </ul>
   </div>
@@ -17,17 +17,8 @@ import axios from 'axios'
 import Movie from './Movie.vue'
 
 export default {
-  name: 'MoviesList',
   components: {
     Movie
-  },
-  props: {
-    msg: String,
-    mode: String,
-    data: {
-      type: Object
-    },
-    func: Function
   },
 
   data () {
@@ -36,36 +27,15 @@ export default {
     }
   },
 
-  beforeMount () {
-    console.log('hook beforeMounted')
-  },
-
   mounted () {
-    console.log('hook mounted')
-
     axios.get('https://api.myjson.com/bins/t9mzc')
     .then(moviesResponse => this.moviesList = moviesResponse.data)
   },
 
   methods: {
-    onUpdateTitle (object) {
-      this.moviesList[object.index].title = object.title
+    onMovieEdit (object) {
+      console.log('onMovieEdit', object)
     },
-
-    changeContent ($event) {
-      this.$emit('update:content', $event.target.value)
-    },
-
-    createData () {
-      this.func()
-
-      // this.data.id = Math.random(1, 5)
-      // this.data.content = this.internalData.content
-    },
-
-    updateData () {
-      alert('updateData')
-    }
   }
 }
 </script>

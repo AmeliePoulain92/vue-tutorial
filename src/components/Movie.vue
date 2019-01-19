@@ -1,6 +1,6 @@
 <template>
 	<li>
-		<button type="button" @click="editTitle()" v-if="data.title">Edit</button>
+		<button type="button" @click="edit" v-if="data.title">Edit</button>
 
     <h3>{{ data.title }}</h3>
     <h4>{{ data.year }}</h4>
@@ -15,8 +15,8 @@ export default {
 	props: ['data'],
 
 	methods: {
-		editTitle () {
-			this.$emit('edit-title', {title: 'test', index: 0})
+		edit () {
+			this.$emit('edit')
 		}
 	}
 }
