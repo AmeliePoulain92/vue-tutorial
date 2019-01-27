@@ -1,18 +1,24 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <MoviesList />
+    <movies-list @edit="onMovieEdit" />
+
+    <modal
+      v-if="movieModalSettings.show"
+      :settings="movieModalSettings" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
 import MoviesList from '@/components/MoviesList.vue'
+import Modal from '@/components/Modal.vue'
 
 export default {
   name: 'home',
   components: {
-    MoviesList
+    MoviesList,
+    Modal
   },
 
   data () {
@@ -20,25 +26,19 @@ export default {
   		data: {
   			id: undefined,
   			title: '',
-  			content: ''
-  		}
+  			content: '',
+  		},
+      movieModalSettings: {
+        show: false
+      }
   	}
   },
 
   methods: {
-  	onChangeContent (value) {
-  		var confirmTest = confirm('Confirm?')
-
-  		if (confirmTest) {
-  			this.data.content = 'parent ' + value
-  		} else {
-  			alert('NO!!!!!')
-  		}
-  	},
-
-  	alertMethod () {
-  		alert('alertMethod')
-  	}
+  	onMovieEdit (movie) {
+      this.movieModalSettings.data = movie
+      this.movieModalSettings.show = true
+    }
   }
 }
 </script>

@@ -35,6 +35,7 @@ export default {
   methods: {
     onMovieEdit (id) {
       let editedMovie = this.moviesList.find(m => m.id === id)
+      this.$emit('edit', editedMovie)
     },
   }
 }
