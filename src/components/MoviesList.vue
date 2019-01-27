@@ -33,8 +33,8 @@ export default {
   },
 
   methods: {
-    onMovieEdit (object) {
-      console.log('onMovieEdit', object)
+    onMovieEdit (id) {
+      let editedMovie = this.moviesList.find(m => m.id === id)
     },
   }
 }
