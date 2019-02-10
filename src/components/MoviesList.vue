@@ -2,9 +2,9 @@
   <div>
     <h1>Movies list</h1>
 
-    <ul class="movies" v-if="moviesList && moviesList.length">
+    <ul class="movies" v-if="data && data.length">
       <movie
-        v-for="(movie) in moviesList"
+        v-for="(movie) in data"
         :key="movie.id"
         @edit="onMovieEdit"
         :data="movie" />
@@ -13,28 +13,23 @@
 </template>
 
 <script>
-import axios from 'axios'
 import Movie from './Movie.vue'
 
 export default {
+  props: ['data'],
   components: {
     Movie
   },
 
   data () {
     return {
-      moviesList: []
-    }
-  },
 
-  mounted () {
-    axios.get('https://api.myjson.com/bins/t9mzc')
-    .then(moviesResponse => this.moviesList = moviesResponse.data)
+    }
   },
 
   methods: {
     onMovieEdit (id) {
-      let editedMovie = this.moviesList.find(m => m.id === id)
+      let editedMovie = this.data.find(m => m.id === id)
       this.$emit('edit', editedMovie)
     },
   }

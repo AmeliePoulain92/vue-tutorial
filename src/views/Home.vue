@@ -1,16 +1,22 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <movies-list @edit="onMovieEdit" />
+    <movies-list @edit="onMovieEdit" :data="moviesList" />
 
     <modal
       v-if="movieModalSettings.show"
-      :settings="movieModalSettings" />
+      :settings="movieModalSettings"
+      @saveMovie="onMovieSave">
+        <template slot-scope="error">
+          <div style="color: red;">{{error}}</div>
+        </template>
+    </modal>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import axios from 'axios'
 import MoviesList from '@/components/MoviesList.vue'
 import Modal from '@/components/Modal.vue'
 
@@ -23,11 +29,7 @@ export default {
 
   data () {
   	return {
-  		data: {
-  			id: undefined,
-  			title: '',
-  			content: '',
-  		},
+  		moviesList: [],
       movieModalSettings: {
         show: false
       }
@@ -38,7 +40,20 @@ export default {
   	onMovieEdit (movie) {
       this.movieModalSettings.data = movie
       this.movieModalSettings.show = true
+    },
+
+    onMovieSave (movie) {
+      let updatedMovieIndex = _.findIndex(this.moviesList, m => m.id === movie.id)
+
+      if (updatedMovieIndex !== -1) {
+        this.$set(this.moviesList, updatedMovieIndex, movie)
+      }
     }
-  }
+  },
+
+  mounted () {
+    axios.get('https://api.myjson.com/bins/t9mzc')
+    .then(moviesResponse => this.moviesList = moviesResponse.data)
+  },
 }
 </script>

@@ -1,17 +1,23 @@
 <template>
 	<div class="modal">
 		<div class="modal-inner">
-			<input type="text" ref="title" v-model="updatedData.title" />
+			<div class="modal-item">
+				<input type="text" ref="title" v-model="updatedData.title" />
+			</div>
 
-			<!-- <ul>
+			<div class="modal-item">
+				<textarea v-model="updatedData.content" cols="30" rows="10"></textarea>
+			</div>
+
+			<ul class="errors">
 				<li v-for="error in errors.title">
 					<slot :error="error">{{error}}</slot>
 				</li>
-			</ul> -->
+			</ul>
 
 			<footer class="modal-footer">
 				<button type="button" @click="close">Cancel</button>
-				<button type="button" :disabled="button_states.save.disabled">Save</button>
+				<button type="button" :disabled="button_states.save.disabled" @click="save">Save</button>
 			</footer>
 		</div>
 	</div>
@@ -37,15 +43,18 @@ export default {
 	methods: {
 		close () {
 			this.settings.show = false
+		},
+
+		save () {
+			this.$emit('saveMovie', this.updatedData)
+			this.close()
 		}
 	},
 
 	watch: {
 		updatedData: {
 			handler (n, o) {
-				if (!_.isEmpty(o)) {
-					this.button_states.save.disabled = false
-				}
+				this.button_states.save.disabled = _.isEqual(n, this.settings.data)
 			},
 			deep: true
 		}
@@ -76,5 +85,10 @@ export default {
 		transform: translate(-50%, -50%);
 		background-color: #fff;
 	}
+}
+
+.errors {
+	list-style: none;
+	padding-left: 0;
 }
 </style>
