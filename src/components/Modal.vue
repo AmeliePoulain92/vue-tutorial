@@ -1,19 +1,33 @@
 <template>
-	<div class="modal">
+	<div class="modal" ref="modal">
 		<div class="modal-inner">
 			<div class="modal-item">
-				<input type="text" ref="title" v-model="updatedData.title" />
+				<input
+					type="text"
+					ref="title"
+					name="title"
+					:required="fieldSettings.title.required"
+					v-model="updatedData.title"
+					class="modal-field" />
+
+					<div class="errors" v-if="errors && errors.title && errors.title.length">
+						<slot name="errors" :error="error" v-for="error in errors.title">{{error.message}}</slot>
+					</div>
 			</div>
 
 			<div class="modal-item">
-				<textarea v-model="updatedData.content" cols="30" rows="10"></textarea>
-			</div>
+				<textarea
+					v-model="updatedData.content"
+					name="content"
+					cols="30"
+					rows="10"
+					:required="fieldSettings.content.required"
+					class="modal-field"></textarea>
 
-			<ul class="errors">
-				<li v-for="error in errors.title">
-					<slot :error="error">{{error}}</slot>
-				</li>
-			</ul>
+					<div class="errors" v-if="errors && errors.content && errors.content.length">
+						<slot name="errors" :error="error" v-for="error in errors.content">{{error.message}}</slot>
+					</div>
+			</div>
 
 			<footer class="modal-footer">
 				<button type="button" @click="close">Cancel</button>
@@ -35,12 +49,57 @@ export default {
 					disabled: true
 				}
 			},
-			errors: {
-				title: ['error1']
-			}
+			messages: {
+				fields: {
+					required: 'This field is required'
+				}
+			},
+			fieldSettings: {
+				title: {
+					required: true
+				},
+				content: {
+					required: false
+				}
+			},
+			errors: {}
 		}
 	},
+
+	computed: {
+		requiredFields () {
+			return Object.entries(this.fieldSettings)
+					.filter(item => item[1].required)
+					.map(item => item[0])
+		},
+
+		hasErrors () {
+			return !!_.flatten(Object.values(this.errors)).length
+		}
+	},
+
 	methods: {
+		errorsHandler (data) {
+			for (let prop in data) {
+				// required check
+				if (!data[prop] && this.requiredFields.includes(prop)) {
+					console.log('test')
+					this.clearErrorsByFieldName(prop)
+
+					this.errors[prop].push({
+						type: 'required',
+						message: this.messages.fields.required
+					})
+				} else {
+					this.clearErrorsByFieldName(prop)
+				}
+			}
+		},
+
+		clearErrorsByFieldName (field) {
+			this.$set(this.errors, field, [])
+		},
+
 		close () {
 			this.settings.show = false
 		},
@@ -53,8 +112,11 @@ export default {
 
 	watch: {
 		updatedData: {
-			handler (n, o) {
-				this.button_states.save.disabled = _.isEqual(n, this.settings.data)
+			handler (n) {
+				if (n) {
+					this.errorsHandler(n)
+					this.button_states.save.disabled = _.isEqual(n, this.settings.data) || this.hasErrors
+				}
 			},
 			deep: true
 		}
@@ -62,7 +124,6 @@ export default {
 
 	mounted () {
 		this.updatedData = _.cloneDeep(this.settings.data)
-
 		this.$refs.title.focus()
 	}
 }
@@ -90,5 +151,8 @@ export default {
 .errors {
 	list-style: none;
 	padding-left: 0;
+	&.highlighted {
+		color: red;
+	}
 }
 </style>

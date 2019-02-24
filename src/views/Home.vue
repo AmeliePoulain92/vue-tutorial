@@ -7,8 +7,8 @@
       v-if="movieModalSettings.show"
       :settings="movieModalSettings"
       @saveMovie="onMovieSave">
-        <template slot-scope="error">
-          <div style="color: red;">{{error}}</div>
+        <template slot="errors" slot-scope="{error}">
+          <div class="errors highlighted">{{error.message}}</div>
         </template>
     </modal>
   </div>
@@ -57,3 +57,9 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" scoped>
+  .errors {
+    color: red;
+  }
+</style>
