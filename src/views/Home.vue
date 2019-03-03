@@ -1,7 +1,11 @@
 <template>
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
-    <movies-list @edit="onMovieEdit" :data="moviesList" />
+    <movies-list  
+      @edit="onMovieEdit"
+      :data="filteredMovies"
+      :filters="filters"
+      :genres="genres" />
 
     <modal
       v-if="movieModalSettings.show"
@@ -32,8 +36,33 @@ export default {
   		moviesList: [],
       movieModalSettings: {
         show: false
+      },
+      filters: {
+        searchQuery: '',
+        genres: []
       }
   	}
+  },
+
+  computed: {
+    genres () {
+      return _.union(...this.moviesList.map(m => m.genres))
+    },
+
+    filteredMovies () {
+      let filteredMovies = this.moviesList
+
+      if (this.filters.genres.length) {
+        filteredMovies = filteredMovies.filter(m => this.filters.genres.some(g => m.genres.includes(g)))
+      }
+
+      if (this.filters.searchQuery) {
+        filteredMovies = filteredMovies
+          .filter(m => m.title.toLowerCase().includes(this.filters.searchQuery.toLowerCase()))
+      }
+
+      return filteredMovies
+    }
   },
 
   methods: {

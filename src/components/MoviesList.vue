@@ -2,6 +2,17 @@
   <div>
     <h1>Movies list</h1>
 
+    <input type="search" v-model="filters.searchQuery" placeholder="Search for movie" />
+
+    <ul class="genres">
+      <li v-for="genre in genres">
+        <label>
+          {{genre}}
+          <input type="checkbox" v-model="filters.genres" :value="genre" />
+        </label>
+      </li>
+    </ul>
+
     <ul class="movies" v-if="data && data.length">
       <movie
         v-for="(movie) in data"
@@ -16,7 +27,7 @@
 import Movie from './Movie.vue'
 
 export default {
-  props: ['data'],
+  props: ['data', 'genres', 'filters'],
   components: {
     Movie
   },
@@ -38,6 +49,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.genres {
+  list-style: none;
+  margin-bottom: 45px;
+}
+
 h3 {
   margin: 40px 0 0;
 }
