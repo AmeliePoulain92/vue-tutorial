@@ -58,7 +58,11 @@ export default {
 
       if (this.filters.searchQuery) {
         filteredMovies = filteredMovies
-          .filter(m => m.title.toLowerCase().includes(this.filters.searchQuery.toLowerCase()))
+          .filter(m => {
+            return Object.values(m)
+              .some(prop => typeof prop === 'string' && prop.toLowerCase()
+                .includes(this.filters.searchQuery.toLowerCase()))
+          })
       }
 
       return filteredMovies
